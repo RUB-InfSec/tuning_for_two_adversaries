@@ -1,0 +1,6 @@
+attack_type: MI_CommonWeakness
+dataset: cifar10
+file: c3b3caf0-901a-4326-9b6b-d3e6534becfd.pth
+norm_type: Linf
+norm_value: 8
+surrogates:

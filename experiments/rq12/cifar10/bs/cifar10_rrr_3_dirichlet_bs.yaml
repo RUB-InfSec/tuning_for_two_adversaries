@@ -1,0 +1,103 @@
+global_seed: !tune.randint
+  lower: 0
+  upper: 1000
+train_git_hash: ''
+evaluation_parameters:
+  ensemble_keys:
+    - -data_parameters.node_id
+    - filtered_parameter_wise
+  ensembles_only: false
+  transfer_file: cifar10_nc_various_architectures.yaml
+training_parameters:
+  early_stopping: false
+  epochs: 200
+data_parameters:
+  batch_size:
+    grid_search:
+      - 32
+      - 64
+      - 128
+      - 256
+      - 512
+      - 1024
+      - 2048
+  batching_seed: !tune.randint
+    lower: 0
+    upper: 1000
+  data_dir: PROJECT_ROOT/data
+  data_split: dirichlet
+  data_split_params:
+    - 0.9
+  dataset: cifar10
+  node_count: 3
+  node_id:
+    grid_search:
+      - 0
+      - 1
+      - 2
+  splitting_seed: 123
+  test_transforms:
+    - name: ToImage
+      params: { }
+    - name: ToDtype
+      params:
+        dtype: torch.float32
+        scale: true
+    - name: Normalize
+      params:
+        mean:
+          - 0.4914
+          - 0.4822
+          - 0.4465
+        std:
+          - 0.247
+          - 0.243
+          - 0.261
+  train_transforms:
+    - name: ToImage
+      params: { }
+    - name: ToDtype
+      params:
+        dtype: torch.uint8
+        scale: true
+    - name: RandomHorizontalFlip
+      params: { }
+    - name: RandomCrop
+      params:
+        padding:
+          - 4
+          - 4
+          - 4
+          - 4
+        size:
+          - 32
+          - 32
+    - name: ToDtype
+      params:
+        dtype: torch.float32
+        scale: true
+    - name: Normalize
+      params:
+        mean:
+          - 0.4914
+          - 0.4822
+          - 0.4465
+        std:
+          - 0.247
+          - 0.243
+          - 0.261
+  validation_split: 0.2
+network_parameters:
+  architecture_name: resnet18
+  dropout_rate: 0.0
+  initialization_seed: !tune.randint
+    lower: 0
+    upper: 1000
+optimizer_parameters:
+  learning_rate: 0.1
+  momentum: 0.9
+  optimizer_name: SGD-M
+  weight_decay: 0.0005
+scheduler_parameters:
+  scheduler_name: CosineAnnealingLR
+  scheduler_params: [ ]
